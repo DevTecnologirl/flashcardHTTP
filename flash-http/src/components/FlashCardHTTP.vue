@@ -16,19 +16,45 @@
       </div>
     </div>
   <div class="bottom-area">
-    <button class="lamp" @click.stop="toggleInfo">
-      💡
-    </button>
-
-    <div v-if="showInfo" class="info">
-      {{ current.description }}
-    </div>
-
     <div class="buttons">
-      <button class="nav-btn" @click="prevCard">Voltar</button>
-      <button class="nav-btn" @click="nextCard">Continuar</button>
-    </div>
+        <button class="lamp" @click.stop="openDicasDialog">
+          💡
+        </button>
+    
+        <div v-if="showDicasDialog" class="overlay" @click="closeDicasDialog">
+            <div class="dialog" @click.stop>
+                <h3>Explicação:</h3>
+          <h4>{{ current.description }}</h4>
+          <button class="close-btn" @click="closeDicasDialog">
+            Fechar
+          </button>
+            </div>
+        </div>
+        <button class="codes" @click.stop="openCodesDialog">
+          ✅
+        </button>
+    
+        <div v-if="showCodesDialog" class="overlay" @click="closeCodesDialog">
+  <div class="dialog" @click.stop>
+    <h3>Erros Relacionados</h3>
+    <ul>
+      <li>1XX — Status Informacional</li>
+      <li>2XX — Status de Sucesso</li>
+      <li>3XX — Redirecionamento</li>
+      <li>4XX — Erro do Cliente</li>
+      <li>5XX — Erro do Servidor</li>
+    </ul>
 
+    <button class="close-btn" @click="closeCodesDialog">
+      Fechar
+    </button>
+  </div>
+    </div>
+</div>
+<div class="buttons">
+  <button class="nav-btn" @click="prevCard">Voltar</button>
+  <button class="nav-btn" @click="nextCard">Continuar</button>
+</div>
   </div>
   </div>
 </template>
@@ -74,6 +100,25 @@ function resetCard(): void {
   isFlipped.value = false
   showInfo.value = false
 }
+const showCodesDialog = ref<boolean>(false)
+
+function openCodesDialog(): void {
+  showCodesDialog.value = true
+}
+
+function closeCodesDialog(): void {
+  showCodesDialog.value = false
+}
+const showDicasDialog = ref<boolean>(false)
+
+function openDicasDialog(): void {
+  showDicasDialog.value = true
+}
+
+function closeDicasDialog(): void {
+  showDicasDialog.value = false
+}
+
 </script>
 
 <style scoped>
@@ -162,6 +207,19 @@ function resetCard(): void {
   justify-content: center;
   box-shadow: 0 6px 15px rgba(0,0,0,0.2);
 }
+.codes {
+  font-size: 28px;
+  border: none;
+  background: white;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
 
 /* INFO */
 .info {
@@ -190,5 +248,48 @@ function resetCard(): void {
   font-weight: bold;
   box-shadow: 0 6px 15px rgba(0,0,0,0.2);
 }
+/* OVERLAY ESCURO */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* CAIXA DO DIALOG */
+.dialog {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  color: #5000aa;
+  text-align: center;
+  width: 300px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.dialog h3 {
+  margin-bottom: 12px;
+}
+
+.dialog ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px 0;
+}
+
+.close-btn {
+  background: #5000aa;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
 </style>
 
